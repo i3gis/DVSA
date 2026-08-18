@@ -624,6 +624,32 @@ Resources:
             Path: /order
             Method: POST
 
+  # Order-Manager-A
+  OrderManagerFunctionA:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      FunctionName: DVSA-ORDER-MANAGER
+      Handler: order-manager.handler
+      Runtime: nodejs12.x
+      CodeUri: backend/src/functions/order-manager/
+      Environment:
+        Variables:
+          userpoolid:
+            Ref: CognitoUserPoolDvsaUserPool
+      MemorySize: 128
+      Timeout: 30
+      Policies:
+        - AmazonCognitoPowerUser
+        - CloudWatchLogsFullAccess
+        - AWSLambdaRole
+      Events:
+        OrderApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /order
+            Method: POST
+
   ## Orders
   OrderNewFunction:
     Type: 'AWS::Serverless::Function'
